@@ -41,7 +41,7 @@
 #endif
 
 // Logging functions save to dir and duplicate to stdout.
-#define LOGFILEDIR "."
+#define LOGFILEDIR "./"
 #define DEBUGTOSTREAM
 
 // The name that will be used throughout the application.
