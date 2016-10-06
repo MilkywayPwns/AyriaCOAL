@@ -60,10 +60,38 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="AyriaCOAL.licenseheader" />
     <None Include="bin\.gitignore" />
     <None Include="obj\.gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Configuration\Defines.h" />
+    <ClInclude Include="Source\Configuration\Warnings.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
