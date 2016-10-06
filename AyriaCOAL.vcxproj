@@ -92,6 +92,11 @@
   <ItemGroup>
     <ClInclude Include="Source\Configuration\Defines.h" />
     <ClInclude Include="Source\Configuration\Warnings.h" />
+    <ClInclude Include="Source\Utility\Strings\Variadicstring.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Source.cpp" />
+    <ClCompile Include="Source\Utility\Strings\Variadicstring.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
