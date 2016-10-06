@@ -30,9 +30,11 @@
     <ClInclude Include="Source\Utility\Strings\Variadicstring.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Utility\Files\Filesystem.cpp" />
     <ClCompile Include="Source\Utility\Strings\Debugstring.cpp" />
     <ClCompile Include="Source\Utility\Strings\Variadicstring.cpp" />
+    <ClCompile Include="Thirdparty\fossa\fossa.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AyriaCOAL.licenseheader" />
@@ -91,21 +93,29 @@
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Bin\Temporary\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)/Thirdparty;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Thirdparty;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Bin\Temporary\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)/Thirdparty;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Thirdparty;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Bin\Temporary\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)/Thirdparty;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Thirdparty;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Bin\Temporary\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)/Thirdparty;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)/Thirdparty;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

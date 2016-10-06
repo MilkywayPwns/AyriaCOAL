@@ -22,6 +22,9 @@
 
 // Warning about comments in type declarations.
 #pragma warning(disable: 4138)
+
+// POSIX name for the function has been deprecated.
+#pragma warning(disable: 4996)
 #else
 
 #endif
