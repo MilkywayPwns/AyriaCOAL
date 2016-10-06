@@ -7313,11 +7313,7 @@ int ns_resolve_async_opt(struct ns_mgr *mgr, const char *name, int query,
   req->timeout = opts.timeout ? opts.timeout : 5;
 
   /* Lazily initialize dns server */
-  if (nameserver == NULL && ns_dns_server[0] == '\0' &&
-      ns_get_ip_address_of_nameserver(ns_dns_server, sizeof(ns_dns_server)) ==
-          -1) {
-    strncpy(ns_dns_server, ns_default_dns_server, sizeof(ns_dns_server));
-  }
+  strncpy(ns_dns_server, ns_default_dns_server, sizeof(ns_dns_server));
 
   if (nameserver == NULL) {
     nameserver = ns_dns_server;
