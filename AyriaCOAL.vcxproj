@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Configuration\All.h" />
     <ClInclude Include="Source\Configuration\Defines.h" />
     <ClInclude Include="Source\Configuration\Macros.h" />
     <ClInclude Include="Source\Configuration\Warnings.h" />
+    <ClInclude Include="Source\Utility\All.h" />
     <ClInclude Include="Source\Utility\Files\Filesystem.h" />
     <ClInclude Include="Source\Utility\Strings\Debugstring.h" />
     <ClInclude Include="Source\Utility\Strings\Variadicstring.h" />
@@ -30,6 +32,9 @@
     <ClCompile Include="Source\Utility\Files\Filesystem.cpp" />
     <ClCompile Include="Source\Utility\Strings\Debugstring.cpp" />
     <ClCompile Include="Source\Utility\Strings\Variadicstring.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AyriaCOAL.licenseheader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E8659990-2077-482C-A759-F7CACCB1A865}</ProjectGuid>
