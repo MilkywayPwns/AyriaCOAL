@@ -25,7 +25,7 @@ struct Client_t
     std::string Userticket;
 };
 
-// Base64 encoded hashes used for auth, not compatible with the forum.
+// Base64 encoded hashes used for auth.
 std::string CreatePasswordhash(std::string &Password, Client_t &State);
 std::string CreateEmailhash(Client_t &State);
 
