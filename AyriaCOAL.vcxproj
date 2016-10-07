@@ -24,6 +24,7 @@
     <ClInclude Include="Source\Configuration\Defines.h" />
     <ClInclude Include="Source\Configuration\Macros.h" />
     <ClInclude Include="Source\Configuration\Warnings.h" />
+    <ClInclude Include="Source\Shared\Userticket.h" />
     <ClInclude Include="Source\STDInclude.h" />
     <ClInclude Include="Source\Utility\All.h" />
     <ClInclude Include="Source\Utility\Crypto\bcrypt.h" />
