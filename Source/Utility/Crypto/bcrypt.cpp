@@ -13,7 +13,7 @@
 
 #define BCRYPT_HASHSIZE 64
 
-std::string COAL::bcrypt::CreateHash(std::string &Header, std::string &Input)
+std::string COAL::bcrypt::CreateHash(std::string &Header, std::string Input)
 {
     char Hash[BCRYPT_HASHSIZE];
     auto Result = crypt_rn(Input.c_str(), Header.c_str(), Hash, BCRYPT_HASHSIZE);
@@ -21,7 +21,7 @@ std::string COAL::bcrypt::CreateHash(std::string &Header, std::string &Input)
     if (Result) return std::string(Result);
     else return std::string("");
 }
-std::string COAL::bcrypt::CreateSalt(size_t Workfactor, std::string &Input)
+std::string COAL::bcrypt::CreateSalt(size_t Workfactor, std::string Input)
 {
     // Verify that workfactor is in range.
     Workfactor = std::min(size_t(31), Workfactor);
@@ -39,7 +39,7 @@ std::string COAL::bcrypt::CreateSalt(size_t Workfactor, std::string &Input)
     if (Result) return std::string(Result);
     else return std::string("");
 }
-bool COAL::bcrypt::Verify(std::string &Hash, std::string &Plain)
+bool COAL::bcrypt::Verify(std::string &Hash, std::string Plain)
 {
     std::string Localhash = CreateHash(Hash, Plain);
     return 0 == std::strcmp(Hash.c_str(), Localhash.c_str());

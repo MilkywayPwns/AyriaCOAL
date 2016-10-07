@@ -15,8 +15,8 @@ namespace COAL
 {
     namespace bcrypt
     {
-        std::string CreateHash(std::string &Header, std::string &Input);
-        std::string CreateSalt(size_t Workfactor, std::string &Input);
-        bool Verify(std::string &Hash, std::string &Plain);
+        std::string CreateHash(std::string &Header, std::string Input);
+        std::string CreateSalt(size_t Workfactor, std::string Input);
+        bool Verify(std::string &Hash, std::string Plain);
     }
 }
