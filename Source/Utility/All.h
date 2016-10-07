@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "Crypto/bcrypt.h"
 #include "Files/Filesystem.h"
 #include "Strings/Debugstring.h"
 #include "Strings/Variadicstring.h"

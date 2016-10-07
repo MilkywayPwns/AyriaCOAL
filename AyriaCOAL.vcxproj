@@ -26,16 +26,23 @@
     <ClInclude Include="Source\Configuration\Warnings.h" />
     <ClInclude Include="Source\STDInclude.h" />
     <ClInclude Include="Source\Utility\All.h" />
+    <ClInclude Include="Source\Utility\Crypto\bcrypt.h" />
     <ClInclude Include="Source\Utility\Files\Filesystem.h" />
     <ClInclude Include="Source\Utility\Strings\Debugstring.h" />
     <ClInclude Include="Source\Utility\Strings\Variadicstring.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Utility\Crypto\bcrypt.cpp" />
     <ClCompile Include="Source\Utility\Files\Filesystem.cpp" />
     <ClCompile Include="Source\Utility\Strings\Debugstring.cpp" />
     <ClCompile Include="Source\Utility\Strings\Variadicstring.cpp" />
     <ClCompile Include="Thirdparty\fossa\fossa.c" />
+    <ClCompile Include="Thirdparty\goldboar\sm3_cl.cpp" />
+    <ClCompile Include="Thirdparty\openwall\crypt_blowfish.cpp" />
+    <ClCompile Include="Thirdparty\openwall\crypt_gensalt.cpp" />
+    <ClCompile Include="Thirdparty\openwall\wrapper.cpp" />
+    <ClCompile Include="Thirdparty\goldboar\sm3.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AyriaCOAL.licenseheader" />
