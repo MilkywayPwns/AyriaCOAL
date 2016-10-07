@@ -23,6 +23,7 @@ struct Client_t
     std::string Email;
     std::string Username;
     std::string Userticket;
+    std::string Lobbyaddress;
 };
 
 // Base64 encoded hashes used for auth.

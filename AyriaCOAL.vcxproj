@@ -32,6 +32,7 @@
     <ClInclude Include="Source\Utility\Strings\Variadicstring.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Client\Clientauth.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Utility\Crypto\bcrypt.cpp" />
     <ClCompile Include="Source\Utility\Files\Filesystem.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Source\Utility\Strings\Variadicstring.cpp" />
     <ClCompile Include="Thirdparty\fossa\fossa.c" />
     <ClCompile Include="Thirdparty\goldboar\sm3_cl.cpp" />
+    <ClCompile Include="Thirdparty\Nyffenegger\base64.cpp" />
     <ClCompile Include="Thirdparty\openwall\crypt_blowfish.cpp" />
     <ClCompile Include="Thirdparty\openwall\crypt_gensalt.cpp" />
     <ClCompile Include="Thirdparty\openwall\wrapper.cpp" />
