@@ -7,7 +7,6 @@
 */
 
 #include <Nyffenegger/base64.h>
-#include <goldboar/sm3_cl.hpp>
 #include "../STDInclude.h"
 #include "Clientstate.h"
 
@@ -21,11 +20,8 @@ std::string CreatePasswordhash(std::string &Password, Client_t &State)
 }
 std::string CreateEmailhash(Client_t &State)
 {
-    uint8_t Localhash[32];
-    SM3 Hasher((uint8_t *)State.Email.data(), State.Email.size());
-    Hasher.digest(Localhash);
-
-    return base64_encode(Localhash, 32);
+    auto Localhash = COAL::SMS3::Hash(State.Email);
+    return base64_encode((uint8_t *)Localhash.data(), Localhash.size());
 }
 
 // Authenticate to the different servers.
