@@ -15,6 +15,6 @@ namespace HTTPClient
     using HTTPCallback = void(__cdecl *)(std::string Result);
 
     // PostData ? POST : GET
-    std::string RequestSync(std::string URL, bool Includeheaders = true, std::string *PostData = nullptr);
-    void RequestAsync(std::string URL, HTTPCallback *CB, bool Includeheaders = true, std::string *PostData = nullptr);
+    std::string RequestSync(std::string Hostname, std::string Connectionstring, bool Includeheaders = true, std::string *PostData = nullptr);
+    void RequestAsync(std::string Hostname, std::string Connectionstring, HTTPCallback *CB, bool Includeheaders = true, std::string *PostData = nullptr);
 }

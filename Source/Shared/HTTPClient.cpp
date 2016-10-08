@@ -15,9 +15,9 @@
 struct Connectioninfo
 {
     bool Done{ false };
-    bool Includeheaders;
-    std::string RequestURL;    
+    bool Includeheaders;  
     std::string Resultstring;
+    std::string Connectionstring;
     std::string *RequestData{ nullptr };
     HTTPClient::HTTPCallback *CB{ nullptr };
 };
@@ -36,12 +36,20 @@ static void InternalEventhandler(ns_connection *Connection, int EventID, void *E
                 VAPrint("HTTPClient::Connect() failed with: \"%s\"", strerror(*(int *)Eventdata));
                 Activerequests[Connection].Done = true;
             }
+            else
+            {
+                if(Activerequests[Connection].RequestData)
+                    ns_printf(Connection, "GET %s HTTP/1.0\r\n\r\n", Activerequests[Connection].Connectionstring.c_str());
+                else
+                    ns_printf(Connection, "POST %s HTTP/1.0\r\nContent-Length: %i\r\n\r\n%s", Activerequests[Connection].Connectionstring.c_str(), 
+                        Activerequests[Connection].RequestData->size(), Activerequests[Connection].RequestData->c_str());
+            }
             break;
         }
 
         case NS_HTTP_REPLY:
         {
-            Connection->flags |= NSF_CLOSE_IMMEDIATELY;
+            Connection->flags |= NSF_SEND_AND_CLOSE;
 
             if (Activerequests[Connection].Includeheaders)
                 Activerequests[Connection].Resultstring.append(Message->message.p);
@@ -57,12 +65,13 @@ static void InternalEventhandler(ns_connection *Connection, int EventID, void *E
         }
     }
 }
-static std::string InternalRequest(Connectioninfo Info)
+static std::string InternalRequest(Connectioninfo Info, std::string Hostname)
 {
     ns_mgr Manager;
     ns_mgr_init(&Manager, NULL);
 
-    auto Connection = ns_connect_http(&Manager, InternalEventhandler, Info.RequestURL.c_str(), NULL, Info.RequestData ? Info.RequestData->data() : NULL);
+    auto Connection = ns_connect(&Manager, Hostname.c_str(), InternalEventhandler);
+    ns_set_protocol_http_websocket(Connection);
     Activerequests[Connection] = Info;
 
     auto Timestamp = std::chrono::system_clock::now();
@@ -80,22 +89,22 @@ static std::string InternalRequest(Connectioninfo Info)
     return Result;
 }
 
-std::string HTTPClient::RequestSync(std::string URL, bool Includeheaders, std::string *PostData)
+std::string HTTPClient::RequestSync(std::string Hostname, std::string Connectionstring, bool Includeheaders, std::string *PostData)
 {
     Connectioninfo Info;
-    Info.Includeheaders = Includeheaders;
-    Info.RequestURL = URL;
     Info.RequestData = PostData;
+    Info.Includeheaders = Includeheaders;
+    Info.Connectionstring = Connectionstring;    
     
-    return InternalRequest(Info);
+    return InternalRequest(Info, Hostname);
 }
-void HTTPClient::RequestAsync(std::string URL, HTTPCallback *CB, bool Includeheaders, std::string *PostData)
+void HTTPClient::RequestAsync(std::string Hostname, std::string Connectionstring, HTTPCallback *CB, bool Includeheaders, std::string *PostData)
 {
     Connectioninfo Info;
-    Info.Includeheaders = Includeheaders;
-    Info.RequestURL = URL;
-    Info.RequestData = PostData;
     Info.CB = CB;
+    Info.RequestData = PostData;
+    Info.Includeheaders = Includeheaders;
+    Info.Connectionstring = Connectionstring; 
 
-    std::thread(InternalRequest, Info).detach();
+    std::thread(InternalRequest, Info, Hostname).detach();
 }
