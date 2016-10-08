@@ -58,3 +58,8 @@
 // #define COAL_OBSERVER
 // #define COAL_AUTH
 // #define COAL_LOBBY
+
+// Internal encryption seed, set via compileflags.
+#ifndef CRYPTOSEED
+#define CRYPTOSEED ""
+#endif
