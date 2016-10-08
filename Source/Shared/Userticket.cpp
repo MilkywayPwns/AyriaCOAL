@@ -50,6 +50,12 @@ std::string DecryptUserticket(std::string &b64)
     return COAL::SMS4::Decrypt(Encryptionkey, EncryptionIV, Decoded);
 }
 
+// Identification for servers.
+const uint32_t FetchTicketversion()
+{
+    return *(uint32_t *)&EncryptionIV[20];
+}
+
 // Initialize the encryption on startup.
 struct InitializeCrypto
 {

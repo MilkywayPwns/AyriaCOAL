@@ -26,3 +26,6 @@ Ticket_t DeserializeUserticket(std::string &Blob);
 // Encryption/decryption on base64 strings.
 std::string EncryptUserticket(std::string &Plain);
 std::string DecryptUserticket(std::string &b64);
+
+// Identification for servers.
+const uint32_t FetchTicketversion();
