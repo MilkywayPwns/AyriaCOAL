@@ -9,6 +9,7 @@
 #include <Nyffenegger/base64.h>
 #include "../STDInclude.h"
 #include "Clientstate.h"
+#include <thread>
 
 // Base64 encoded hashes used for auth.
 std::string CreatePasswordhash(std::string &Password, Client_t &State)
@@ -29,7 +30,7 @@ bool AuthenticateAuthserver(std::string &Password, Client_t &State)
 {
     auto b64Email = CreateEmailhash(State);
     auto b64Password = CreatePasswordhash(Password, State);
-    auto Connectionstring = "GET /auth?email=" + b64Email + "&b64pwhash" + b64Password;
+    auto Resource = "/auth?b64email=" + b64Email + "&b64pwhash" + b64Password;
     auto Hostname = std::string("http://") + "coalauth.ayria.se";
 
     /*
@@ -37,19 +38,39 @@ bool AuthenticateAuthserver(std::string &Password, Client_t &State)
         Override Hostname through a config when implemented.
     */
 
-    /*
-        TODO(Convery):
-        Create a HTTP request.
-        if 404 -> return false;
-        if 308 -> set State.Lobbyaddress
-        && set State.Userticket;
-    */
+    // This is a bit of a hack as we need the additional async data.
+    {
+        bool Authenticated = false;
+        bool Callbackhit = false;
 
-    return false;
+        // Perform the HTTP request to the auth server.
+        auto Callback = [&](uint32_t Resultcode, std::string Resultbody, std::string Additionaldata)
+        {
+            // Incorrect details.
+            if (Resultcode == 403) VAPrint("%s: Invalid credentials", "AuthenticateAuthserver");
+
+            // Set the lobby even if the data is null.
+            State.Lobbyaddress = Additionaldata;
+
+            // Decode the ticket if we got one.
+            if(Resultbody.size())
+                State.Userticket = base64_decode(Resultbody);
+
+            // Set the result and return.
+            Authenticated = Resultcode && Resultcode != 403;
+            Callbackhit = true;
+        };
+        HTTPClient::Async::GET(Hostname, Resource, Callback);
+
+        // Wait for the callback.
+        while (!Callbackhit) std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+        return Authenticated;
+    }
 }
 bool AuthenticateLobbyserver(Client_t &State)
 {
-    auto Connectionstring = "GET /auth?b64ticket" + base64_encode((uint8_t *)State.Userticket.data(), State.Userticket.size());
+    auto Connectionstring = "/auth?b64ticket" + base64_encode((uint8_t *)State.Userticket.data(), State.Userticket.size());
     auto Hostname = "ws://" + State.Lobbyaddress;
 
     /*
