@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AyriaCOAL.licenseheader" />
+    <None Include="Documentation\Clientservices.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E8659990-2077-482C-A759-F7CACCB1A865}</ProjectGuid>
