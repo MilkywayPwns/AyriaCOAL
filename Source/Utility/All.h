@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "Crypto/FNV1.h"
 #include "Crypto/SMS3.h"
 #include "Crypto/SMS4.h"
 #include "Crypto/bcrypt.h"
