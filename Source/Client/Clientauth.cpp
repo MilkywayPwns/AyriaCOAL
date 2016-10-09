@@ -7,81 +7,96 @@
 */
 
 #include <Nyffenegger/base64.h>
+#include <nlohmann/json.hpp>
 #include "../STDInclude.h"
+#include <unordered_map>
 #include "Clientstate.h"
 #include <thread>
 
-// Base64 encoded hashes used for auth.
-std::string CreatePasswordhash(std::string &Password, Client_t &State)
+// Authentication to the auth server.
+bool Client::Authenticate(std::string &Password, Client_t &State)
 {
-    auto Salt = COAL::bcrypt::CreateSalt(14, State.Email + "AYRIA_PASSWORD");
-    auto Hash = COAL::bcrypt::CreateHash(Salt, Password);
+    nlohmann::json Request;
 
-    return base64_encode((uint8_t *)Hash.data(), Hash.size());
-}
-std::string CreateEmailhash(Client_t &State)
-{
-    auto Localhash = COAL::SMS3::Hash(State.Email);
-    return base64_encode((uint8_t *)Localhash.data(), Localhash.size());
-}
-
-// Authenticate to the different servers.
-bool AuthenticateAuthserver(std::string &Password, Client_t &State)
-{
-    auto b64Email = CreateEmailhash(State);
-    auto b64Password = CreatePasswordhash(Password, State);
-    auto Resource = "/auth?b64email=" + b64Email + "&b64pwhash" + b64Password;
-    auto Hostname = std::string("http://") + "coalauth.ayria.se";
+    // Create the JSON formated request.
+    Request["Service"] = "Authentication";
+    Request["Email"] = base64_encode((uint8_t *)State.Email.data(), State.Email.size());
+    Request["Password"] = [&]()
+    {
+        auto Salt = COAL::bcrypt::CreateSalt(14, State.Email + "AYRIA_PASSWORD");
+        auto Hash = COAL::bcrypt::CreateHash(Salt, Password);
+        return base64_encode((uint8_t *)Hash.data(), Hash.size());
+    }();
 
     /*
         TODO(Convery):
-        Override Hostname through a config when implemented.
+        When we have created some configuration manager,
+        we should override the hostname through it.
     */
-
-    // This is a bit of a hack as we need the additional async data.
+    std::string Hostname = "coalauth.ayria.se";
+    auto Callback = [&](size_t Socket, Networking::NetEvent Event, std::string Data)
     {
-        bool Authenticated = false;
-        bool Callbackhit = false;
+        // Ignore dropped connections, they are a failed auth.
+        if (Event != Networking::NetEvent::DATA) return;
 
-        // Perform the HTTP request to the auth server.
-        auto Callback = [&](uint32_t Resultcode, std::string Resultbody, std::string Additionaldata)
+        try
         {
-            // Incorrect details.
-            if (Resultcode == 403) VAPrint("%s: Invalid credentials", "AuthenticateAuthserver");
+            auto Response = nlohmann::json::parse(Data.c_str());
+            if (std::strstr(Response["Result"].get<std::string>().c_str(), "Success"))
+            {
+                State.Userticket = Response["Ticket"].get<std::string>();
+                State.Lobbyaddress = Response["Lobby"].get<std::string>();
+            }
+        }
+        catch (std::exception &e) 
+        {
+            VAPrint("Client::Authenticate::Callback error: %s", e.what()); 
+        }
+    };
 
-            // Set the lobby even if the data is null.
-            State.Lobbyaddress = Additionaldata;
+    // Connect to the auth server.
+    State.Socket = Networking::Connect(Hostname + ":" + COAL_PORT);
+    Networking::Subscribe(State.Socket, Callback);
+    Networking::Publish(State.Socket, Request.dump());
 
-            // Decode the ticket if we got one.
-            if(Resultbody.size())
-                State.Userticket = base64_decode(Resultbody);
+    return State.Socket != NULL;
+}
+bool Client::isAuthenticated(Client_t &State)
+{
+    return State.Userticket.size() > 0;
+}
 
-            // Set the result and return.
-            Authenticated = Resultcode && Resultcode != 403;
-            Callbackhit = true;
-        };
-        HTTPClient::Async::GET(Hostname, Resource, Callback);
+// Remain authenticated via the lobby server.
+static std::unordered_map<size_t, Client_t> Clientsockets;
+void Client::Lobbycallback(size_t Socket, Networking::NetEvent Event, std::string Data)
+{
+    try
+    {
+        auto Response = nlohmann::json::parse(Data.c_str());
 
-        // Wait for the callback.
-        while (!Callbackhit) std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-        return Authenticated;
+        /*
+            TODO(Convery):
+            We should check a "Service" JSON entry in Response
+            and then call Service(Clientsockets[Socket], Data);
+        */
+    }
+    catch (std::exception &e) 
+    {
+        VAPrint("%s error: %s", __FUNCTION__, e.what()); 
     }
 }
-bool AuthenticateLobbyserver(Client_t &State)
+bool Client::Remauth(Client_t &State)
 {
-    auto Connectionstring = "GET /auth?b64ticket" + base64_encode((uint8_t *)State.Userticket.data(), State.Userticket.size());
-    auto Hostname = "ws://" + State.Lobbyaddress;
+    nlohmann::json Request;
 
-    State.Socket = Websocket::Connect(Hostname);
-    if (!State.Socket) return false;
+    // Create the JSON formated request.
+    Request["Service"] = "Remauth";
+    Request["Ticket"] = State.Userticket;
 
-    /*
-        TODO(Convery):
-        Connect and upgrade to websocket.
-        if 200 -> set State.Socket;
-        if dropped -> cry.
-    */
+    // Connect to the lobby server.
+    State.Socket = Networking::Connect(State.Lobbyaddress + ":" + COAL_PORT);
+    Networking::Subscribe(State.Socket, Lobbycallback);
+    Networking::Publish(State.Socket, Request.dump());
 
-    return false;
+    return State.Socket != NULL;
 }

@@ -19,6 +19,7 @@ struct Client_t
 
     uint32_t AppID;
     uint32_t UserID;
+    uint32_t Expiration;
 
     std::string Email;
     std::string Username;
@@ -26,10 +27,13 @@ struct Client_t
     std::string Lobbyaddress;
 };
 
-// Base64 encoded hashes used for auth.
-std::string CreatePasswordhash(std::string &Password, Client_t &State);
-std::string CreateEmailhash(Client_t &State);
+namespace Client
+{
+    // Authentication to the auth server.
+    bool Authenticate(std::string &Password, Client_t &State);
+    bool isAuthenticated(Client_t &State);
 
-// Authenticate to the different servers.
-bool AuthenticateAuthserver(std::string &Password, Client_t &State);
-bool AuthenticateLobbyserver(Client_t &State);
+    // Remain authenticated via the lobby server.
+    void Lobbycallback(size_t Socket, Networking::NetEvent Event, std::string Data);
+    bool Remauth(Client_t &State);
+}
