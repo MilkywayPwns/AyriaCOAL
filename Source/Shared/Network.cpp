@@ -79,7 +79,8 @@ static Networkinitializer Networkloader;
 
 void Networking::Subscribe(size_t Socket, NetCallback Callback)
 {
-    Socketcallbacks[Socket].push_back(Callback);
+    if(Socket != NULL)
+        Socketcallbacks[Socket].push_back(Callback);
 }
 void Networking::Publish(size_t Socket, std::string Data)
 {
