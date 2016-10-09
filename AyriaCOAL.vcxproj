@@ -56,6 +56,7 @@
     <ClCompile Include="Thirdparty\openwall\crypt_gensalt.cpp" />
     <ClCompile Include="Thirdparty\openwall\wrapper.cpp" />
     <ClCompile Include="Thirdparty\goldboar\sm3.c" />
+    <ClCompile Include="Thirdparty\sqlite\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AyriaCOAL.licenseheader" />
