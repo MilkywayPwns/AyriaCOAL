@@ -73,12 +73,7 @@ void Client::Lobbycallback(size_t Socket, Networking::NetEvent Event, std::strin
     try
     {
         auto Response = nlohmann::json::parse(Data.c_str());
-
-        /*
-            TODO(Convery):
-            We should check a "Service" JSON entry in Response
-            and then call Service(Clientsockets[Socket], Data);
-        */
+        Services::Call(Response["Service"], &Clientsockets[Socket], Data);
     }
     catch (std::exception &e) 
     {
