@@ -70,8 +70,11 @@ bool AuthenticateAuthserver(std::string &Password, Client_t &State)
 }
 bool AuthenticateLobbyserver(Client_t &State)
 {
-    auto Connectionstring = "/auth?b64ticket" + base64_encode((uint8_t *)State.Userticket.data(), State.Userticket.size());
+    auto Connectionstring = "GET /auth?b64ticket" + base64_encode((uint8_t *)State.Userticket.data(), State.Userticket.size());
     auto Hostname = "ws://" + State.Lobbyaddress;
+
+    State.Socket = Websocket::Connect(Hostname);
+    if (!State.Socket) return false;
 
     /*
         TODO(Convery):

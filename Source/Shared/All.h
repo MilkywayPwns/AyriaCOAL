@@ -9,3 +9,4 @@
 #pragma once
 #include "Userticket.h"
 #include "HTTPClient.h"
+#include "Network/Websocket.h"
