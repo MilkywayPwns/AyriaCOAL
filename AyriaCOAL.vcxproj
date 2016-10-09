@@ -25,9 +25,7 @@
     <ClInclude Include="Source\Configuration\Macros.h" />
     <ClInclude Include="Source\Configuration\Warnings.h" />
     <ClInclude Include="Source\Shared\All.h" />
-    <ClInclude Include="Source\Shared\HTTPClient.h" />
     <ClInclude Include="Source\Shared\Network.h" />
-    <ClInclude Include="Source\Shared\Network\Websocket.h" />
     <ClInclude Include="Source\Shared\Userticket.h" />
     <ClInclude Include="Source\STDInclude.h" />
     <ClInclude Include="Source\Utility\All.h" />
@@ -41,9 +39,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Client\Clientauth.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\Shared\HTTPClient.cpp" />
     <ClCompile Include="Source\Shared\Network.cpp" />
-    <ClCompile Include="Source\Shared\Network\Websocket.cpp" />
     <ClCompile Include="Source\Shared\Userticket.cpp" />
     <ClCompile Include="Source\Utility\Crypto\bcrypt.cpp" />
     <ClCompile Include="Source\Utility\Crypto\SMS3.cpp" />
