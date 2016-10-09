@@ -51,6 +51,10 @@ static void InternalEventhandler(ns_connection *Connection, int EventID, void *E
             {
                 S(Socket, Networking::NetEvent::DISCONNECT, "");
             }
+
+            // Remove all subscribers.
+            Socketcallbacks[Socket].clear();
+            Socketcallbacks.erase(Socket);
             break;
         }
     }
@@ -79,7 +83,8 @@ void Networking::Subscribe(size_t Socket, NetCallback Callback)
 }
 void Networking::Publish(size_t Socket, std::string Data)
 {
-    ns_send_websocket_frame((ns_connection *)Socket, WEBSOCKET_OP_TEXT, Data.data(), Data.size());
+    if(Socket != NULL)
+        ns_send_websocket_frame((ns_connection *)Socket, WEBSOCKET_OP_TEXT, Data.data(), Data.size());
 }
 
 size_t Networking::Connect(std::string Hostname)
