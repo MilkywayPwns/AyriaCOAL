@@ -63,3 +63,6 @@
 #ifndef CRYPTOSEED
 #define CRYPTOSEED ""
 #endif
+
+// Default port for connecting to the servers.
+#define COAL_PORT "28000"
