@@ -56,7 +56,7 @@ bool COAL::File::Read(const char *Filepath, std::string *Databuffer)
 
     // Create a temp buffer.
     size_t Filelength = Size(Filepath);
-    auto Buffer = std::unique_ptr<char[]>(new char[Filelength]);
+    auto Buffer = std::make_unique<char[]>(Filelength);
 
     // Read the file into the buffer.
     bool Result = Read(Filepath, Buffer.get(), &Filelength);
