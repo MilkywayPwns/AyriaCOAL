@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Auth\Authheader.h" />
     <ClInclude Include="Source\Client\Clientstate.h" />
     <ClInclude Include="Source\Configuration\All.h" />
     <ClInclude Include="Source\Configuration\Defines.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="Source\Utility\Strings\Variadicstring.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Auth\Authlistener.cpp" />
     <ClCompile Include="Source\Client\Clientauth.cpp" />
     <ClCompile Include="Source\Client\Services\ClientTicket.cpp" />
     <ClCompile Include="Source\Lobby\Lobbylistener.cpp" />

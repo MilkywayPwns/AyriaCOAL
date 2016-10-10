@@ -10,5 +10,6 @@
 
 #include "Configuration/All.h"
 #include "Lobby/Lobbyheader.h"
+#include "Auth/Authheader.h"
 #include "Utility/All.h"
 #include "Shared/All.h"

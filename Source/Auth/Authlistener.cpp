@@ -6,12 +6,13 @@
         Listens on new connections for messages.
 */
 
-#include "Lobbyheader.h"
+#include "Authheader.h"
+#include <fossa/fossa.h>
 #include "../STDInclude.h"
 #include <nlohmann/json.hpp>
 
-// Connected clients that we manage.
-static std::unordered_map<size_t, Lobbyclient_t> Lobbysockets;
+// Connections that we manage.
+static std::unordered_map<size_t, Connection_t *> Connectedsockets;
 
 // Callback on network events.
 static void Socketlistener(size_t Socket, Networking::NetEvent Event, std::string Data)
@@ -21,7 +22,7 @@ static void Socketlistener(size_t Socket, Networking::NetEvent Event, std::strin
         try
         {
             auto Response = nlohmann::json::parse(Data.c_str());
-            Services::Call(Response["Service"], &Lobbysockets[Socket], Data);
+            Services::Call(Response["Service"], Connectedsockets[Socket], Data);
         }
         catch (std::exception &e) 
         {
@@ -33,14 +34,14 @@ static void Socketlistener(size_t Socket, Networking::NetEvent Event, std::strin
 
     if (Event == Networking::NetEvent::CONNECT)
     {
-        Lobbysockets[Socket].Socket = Socket;
-        Lobbysockets[Socket].Authenticated = false;
+        Connectedsockets[Socket] = new Connection_t();
+        Connectedsockets[Socket]->Socket = Socket;
         return;
     }
 
     if (Event == Networking::NetEvent::DISCONNECT)
     {
-        Lobbysockets.erase(Socket);
+        Connectedsockets.erase(Socket);
         return;
     }
 }
@@ -51,13 +52,38 @@ static void Connectionlistener(size_t Socket, Networking::NetEvent Event, std::s
     Networking::Subscribe(Socket, Socketlistener);
 }
 
-#ifdef COAL_LOBBY
-struct Lobbyloader
+// Move the socket into the permanent list.
+void Auth::Upgradesocket(size_t Socket, Lobby_t *State)
 {
-    Lobbyloader()
+    delete Connectedsockets[Socket];
+    Connectedsockets[Socket] = State;
+}
+
+// Find a lobby server for the client.
+Lobby_t *Auth::Findserver(Connection_t Client)
+{
+    for (auto &C : Connectedsockets)
+    {
+        if (C.second->Version == 0) continue;
+
+        auto Lobby = (Lobby_t *)C.second;
+        if (Lobby->CPULoad > 80) continue;
+        if (Lobby->RAMLoad > 80) continue;
+        if (Lobby->NETLoad > 80) continue;
+        
+        return Lobby;
+    }
+
+    return nullptr;
+}
+
+#ifdef COAL_AUTH
+struct Authloader
+{
+    Authloader()
     {
         Networking::onConnect(Connectionlistener);
     }
 };
-static Lobbyloader Loader;
+static Authloader Loader;
 #endif
