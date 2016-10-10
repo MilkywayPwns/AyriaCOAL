@@ -21,5 +21,5 @@ struct Lobbyclient_t
 namespace Lobby
 {
     // Get the default Lobby_t struct.
-    Lobby_t *GetLobby();
+    struct Lobby_t *GetLobby();
 }

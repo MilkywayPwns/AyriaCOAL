@@ -34,5 +34,5 @@ namespace Client
     bool Authenticate(std::string Password, Client_t *State);
 
     // (re-)Authenticate the client to the lobby system.
-    bool Remauth(Client_t *State);
+    void Remauth(Client_t *State);
 }

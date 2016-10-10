@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Auth\Authlistener.cpp" />
+    <ClCompile Include="Source\Client\Clientauthentication.cpp" />
     <ClCompile Include="Source\Client\Clientlistener.cpp" />
     <ClCompile Include="Source\Lobby\Lobbylistener.cpp" />
     <ClCompile Include="Source\Main.cpp" />
