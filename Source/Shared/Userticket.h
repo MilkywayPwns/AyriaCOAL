@@ -13,9 +13,9 @@
 
 struct Ticket_t
 {
+    std::string IPAddress;
     std::string Username;
     uint32_t Expiration;
-    uint32_t IPAddress;
     uint32_t UserID;
 };
 

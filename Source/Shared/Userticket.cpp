@@ -30,7 +30,7 @@ Ticket_t DeserializeUserticket(std::string &Blob)
 
     Ticket.UserID = Object["userid"];
     Ticket.Username = Object["username"].get<std::string>();
-    Ticket.IPAddress = Object["ipaddress"];
+    Ticket.IPAddress = Object["ipaddress"].get<std::string>();
     Ticket.Expiration = Object["expiration"];
 
     return Ticket;
