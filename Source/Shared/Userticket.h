@@ -30,7 +30,7 @@ namespace Userticket
     std::string Decrypt(std::string &b64);
 
     // Identification for servers.
-    const uint32_t FetchVersion();
+    const uint64_t Version();
 }
 
 

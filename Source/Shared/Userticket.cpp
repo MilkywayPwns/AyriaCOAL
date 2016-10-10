@@ -51,9 +51,9 @@ std::string Userticket::Decrypt(std::string &b64)
 }
 
 // Identification for servers.
-const uint32_t Userticket::FetchVersion()
+const uint64_t Userticket::Version()
 {
-    return *(uint32_t *)&EncryptionIV[20];
+    return *(uint64_t *)&EncryptionIV[20];
 }
 
 // Initialize the encryption on startup.
