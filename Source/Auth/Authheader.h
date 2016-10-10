@@ -22,6 +22,8 @@ struct Lobby_t : public Connection_t
     uint8_t RAMLoad;
     uint8_t NETLoad;
     uint8_t GEOInfo;
+
+    uint64_t ServerID;
 };
 
 namespace Auth
