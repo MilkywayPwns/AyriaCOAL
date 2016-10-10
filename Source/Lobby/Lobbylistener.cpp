@@ -13,6 +13,13 @@
 // Connected clients that we manage.
 static std::unordered_map<size_t, Lobbyclient_t> Lobbysockets;
 
+// Get the default Lobby_t struct.
+Lobby_t *Lobby::GetLobby()
+{
+    static Lobby_t Default;
+    return &Default;
+}
+
 // Callback on network events.
 static void Socketlistener(size_t Socket, Networking::NetEvent Event, std::string Data)
 {

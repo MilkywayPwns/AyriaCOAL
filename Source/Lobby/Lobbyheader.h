@@ -17,3 +17,9 @@ struct Lobbyclient_t
     bool Authenticated;
     Ticket_t Accountinfo;
 };
+
+namespace Lobby
+{
+    // Get the default Lobby_t struct.
+    Lobby_t *GetLobby();
+}
