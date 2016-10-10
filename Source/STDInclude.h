@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Configuration/All.h"
+#include "Client/Clientheader.h"
 #include "Lobby/Lobbyheader.h"
 #include "Auth/Authheader.h"
 #include "Utility/All.h"
