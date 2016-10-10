@@ -31,7 +31,8 @@ static void InternalEventhandler(ns_connection *Connection, int EventID, void *E
             // Post this to all subscribers.
             for (auto &S : Socketcallbacks[Socket])
             {
-                S(Socket, Networking::NetEvent::DATA, std::string((char *)Message->data, Message->size));
+                // Create the callback in a new thread.
+                std::thread(S, Socket, Networking::NetEvent::DATA, std::string((char *)Message->data, Message->size)).detach();
             }
             break;
         }
@@ -40,7 +41,8 @@ static void InternalEventhandler(ns_connection *Connection, int EventID, void *E
             // Post this to all subscribers.
             for (auto &S : Connectcallbacks)
             {
-                S(Socket, Networking::NetEvent::CONNECT, "");
+                // Create the callback in a new thread.
+                std::thread(S, Socket, Networking::NetEvent::CONNECT, "").detach();
             }
             break;
         }
@@ -49,7 +51,8 @@ static void InternalEventhandler(ns_connection *Connection, int EventID, void *E
             // Post this to all subscribers.
             for (auto &S : Socketcallbacks[Socket])
             {
-                S(Socket, Networking::NetEvent::DISCONNECT, "");
+                // Create the callback in a new thread.
+                std::thread(S, Socket, Networking::NetEvent::DISCONNECT, "").detach();
             }
 
             // Remove all subscribers.
