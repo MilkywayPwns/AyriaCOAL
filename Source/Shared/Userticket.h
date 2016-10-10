@@ -19,13 +19,18 @@ struct Ticket_t
     uint32_t UserID;
 };
 
-// JSON representation of the ticket to allow for modification between versions.
-std::string SerializeUserticket(Ticket_t &Ticket);
-Ticket_t DeserializeUserticket(std::string &Blob);
+namespace Userticket
+{
+    // JSON representation of the ticket to allow for modification between versions.
+    std::string Serialize(Ticket_t &Ticket);
+    Ticket_t Deserialize(std::string &Blob);
 
-// Encryption/decryption on base64 strings.
-std::string EncryptUserticket(std::string &Plain);
-std::string DecryptUserticket(std::string &b64);
+    // Encryption/decryption on base64 strings.
+    std::string Encrypt(std::string &Plain);
+    std::string Decrypt(std::string &b64);
 
-// Identification for servers.
-const uint32_t FetchTicketversion();
+    // Identification for servers.
+    const uint32_t FetchVersion();
+}
+
+

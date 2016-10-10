@@ -13,7 +13,7 @@
 #include "Userticket.h"
 
 // JSON representation of the ticket to allow for modification between versions.
-std::string SerializeUserticket(Ticket_t &Ticket)
+std::string Userticket::Serialize(Ticket_t &Ticket)
 {
     nlohmann::json Object;
     Object["userid"] = Ticket.UserID;
@@ -23,7 +23,7 @@ std::string SerializeUserticket(Ticket_t &Ticket)
     
     return Object.dump();
 }
-Ticket_t DeserializeUserticket(std::string &Blob)
+Ticket_t Userticket::Deserialize(std::string &Blob)
 {
     nlohmann::json Object = nlohmann::json::parse(Blob.c_str());
     Ticket_t Ticket;
@@ -39,19 +39,19 @@ Ticket_t DeserializeUserticket(std::string &Blob)
 // Encryption/decryption on base64 strings.
 std::string Encryptionkey;
 std::string EncryptionIV;
-std::string EncryptUserticket(std::string &Plain)
+std::string Userticket::Encrypt(std::string &Plain)
 {
     auto Encrypted = COAL::SMS4::Encrypt(Encryptionkey, EncryptionIV, Plain);
     return base64_encode((uint8_t *)Encrypted.data(), Encrypted.size());
 }
-std::string DecryptUserticket(std::string &b64)
+std::string Userticket::Decrypt(std::string &b64)
 {
     auto Decoded = base64_decode(b64);
     return COAL::SMS4::Decrypt(Encryptionkey, EncryptionIV, Decoded);
 }
 
 // Identification for servers.
-const uint32_t FetchTicketversion()
+const uint32_t Userticket::FetchVersion()
 {
     return *(uint32_t *)&EncryptionIV[20];
 }
