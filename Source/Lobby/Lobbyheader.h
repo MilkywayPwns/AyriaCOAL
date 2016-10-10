@@ -9,6 +9,7 @@
 #pragma once
 #include <cstdint>
 #include "../STDInclude.h"
+#include "../Auth/Authheader.h"
 #include "../Shared/Userticket.h"
 
 struct Lobbyclient_t
@@ -21,5 +22,5 @@ struct Lobbyclient_t
 namespace Lobby
 {
     // Get the default Lobby_t struct.
-    struct Lobby_t *GetLobby();
+    Lobby_t *GetLobby();
 }
