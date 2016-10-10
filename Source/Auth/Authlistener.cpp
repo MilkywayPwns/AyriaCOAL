@@ -60,7 +60,7 @@ void Auth::Upgradesocket(size_t Socket, Lobby_t *State)
 }
 
 // Find a lobby server for the client.
-Lobby_t *Auth::Findserver(Connection_t Client)
+Lobby_t *Auth::Findserver(Connection_t *Client)
 {
     for (auto &C : Connectedsockets)
     {
@@ -70,6 +70,11 @@ Lobby_t *Auth::Findserver(Connection_t Client)
         if (Lobby->CPULoad > 80) continue;
         if (Lobby->RAMLoad > 80) continue;
         if (Lobby->NETLoad > 80) continue;
+
+        /*
+            TODO(Convery):
+            Compare geolocation with the Client->Socket->sa IP.
+        */
         
         return Lobby;
     }

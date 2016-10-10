@@ -30,5 +30,5 @@ namespace Auth
     void Upgradesocket(size_t Socket, Lobby_t *State);
 
     // Find a lobby server for the client.
-    Lobby_t *Findserver(Connection_t Client);
+    Lobby_t *Findserver(Connection_t *Client);
 }
