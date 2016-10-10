@@ -9,5 +9,6 @@
 #pragma once
 
 #include "Configuration/All.h"
+#include "Lobby/Lobbyheader.h"
 #include "Utility/All.h"
 #include "Shared/All.h"

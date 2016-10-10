@@ -6,28 +6,42 @@
         Listens on new connections for messages.
 */
 
+#include "Lobbyheader.h"
 #include "../STDInclude.h"
 #include <nlohmann/json.hpp>
 
-struct Lobbyclient_t
-{
-    bool Verified;
-    size_t Socket;
-    Ticket_t Userticket;
-};
-
-// Listen on incoming packets.
+// Connected clients that we manage.
 static std::unordered_map<size_t, Lobbyclient_t> Lobbysockets;
+
+// Callback on network events.
 static void Socketlistener(size_t Socket, Networking::NetEvent Event, std::string Data)
 {
-    try
+    if (Event == Networking::NetEvent::DATA)
     {
-        auto Response = nlohmann::json::parse(Data.c_str());
-        Services::Call(Response["Service"], &Lobbysockets[Socket], Data);
+        try
+        {
+            auto Response = nlohmann::json::parse(Data.c_str());
+            Services::Call(Response["Service"], &Lobbysockets[Socket], Data);
+        }
+        catch (std::exception &e) 
+        {
+            VAPrint("%s error: %s", __FUNCTION__, e.what()); 
+        }
+
+        return;
     }
-    catch (std::exception &e) 
+
+    if (Event == Networking::NetEvent::CONNECT)
     {
-        VAPrint("%s error: %s", __FUNCTION__, e.what()); 
+        Lobbysockets[Socket].Socket = Socket;
+        Lobbysockets[Socket].Authenticated = false;
+        return;
+    }
+
+    if (Event == Networking::NetEvent::DISCONNECT)
+    {
+        Lobbysockets.erase(Socket);
+        return;
     }
 }
 
