@@ -47,7 +47,7 @@
     <ClCompile Include="Source\Lobby\Lobbylistener.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Shared\Network.cpp" />
-    <ClCompile Include="Source\Shared\Services\Auth\Authentication.cpp" />
+    <ClCompile Include="Source\Shared\Services\Authenticationservice.cpp" />
     <ClCompile Include="Source\Shared\Userticket.cpp" />
     <ClCompile Include="Source\Utility\Crypto\bcrypt.cpp" />
     <ClCompile Include="Source\Utility\Crypto\SMS3.cpp" />

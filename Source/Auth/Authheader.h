@@ -13,7 +13,7 @@
 struct Connection_t
 {
     size_t Socket;
-    uint32_t Version;
+    uint64_t Version;
     std::string IPAddress;
 };
 struct Lobby_t : public Connection_t
