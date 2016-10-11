@@ -23,12 +23,14 @@ bool Database::Insert(std::string table, std::map < std::string, QueryValue > va
 		return false;
 	}
 	
+	// Temponary variables
 	std::string valstr;
 	std::string colstr;
 
 	// Convert from array into strings
 	for (auto it : values)
 	{
+		// Add columns and values to the query, replace unallowed tokens with its html code
 		colstr += Database::EscapeString(it.first) + ",";
 		valstr += "'" + Database::EscapeString(it.second.ToString()) + "',";
 	}
@@ -45,6 +47,7 @@ bool Database::Insert(std::string table, std::map < std::string, QueryValue > va
 	char *error;
 	int result = sqlite3_exec(Database::DatabasePtr, SQL.c_str(), nullptr, nullptr, &error);
 
+	// Check if query succeeded
 	if (result != SQLITE_OK && error)
 		VAPrint("Database error: %s", error);
 
@@ -55,6 +58,7 @@ bool Database::Insert(std::string table, std::map < std::string, QueryValue > va
 // SQL Select function
 std::vector< Database::QueryResult > Database::Select(std::string table, std::map < std::string, QueryValue > where_stmt, std::vector < std::string > column_stmt)
 {
+	// Return result
 	std::vector < Database::QueryResult > result;
 
 	// Check if database connection is open
@@ -91,8 +95,11 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 		bool firstEntry = true;
 		for (auto col : where_stmt)
 		{
+			// Add column condition into query
 			data_where += ((firstEntry) ? "WHERE " : "AND ") + Database::EscapeString(col.first) + "='" + Database::EscapeString(col.second.ToString()) + "' ";
-			firstEntry = false;
+			
+			// Make sure WHERE changes into AND after first entry has been parsed
+			firstEntry = false;	
 		}
 	}
 
@@ -105,6 +112,7 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 	const char *pzTail = nullptr;
 	int rc = sqlite3_prepare_v2(Database::DatabasePtr, SQL.c_str(), -1, &statement, &pzTail);
 
+	// Check if query succeeded
 	if (rc == SQLITE_OK)
 	{
 		// Loop through the data
@@ -131,6 +139,7 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 					case SQLITE_INTEGER:
 						row.append(colname, QueryValue(sqlite3_column_int64(statement, i)));
 						break;
+					// TODO: Add support for more types
 					default:
 						VAPrint("Database error: Unhandled data type %i in function %s\n", type, __FUNCTION__);
 				}
@@ -142,6 +151,7 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 	}
 	else
 	{
+		// Something went wrong, log to console
 		VAPrint("Database error: Something went wrong while trying to obtain data from the database, errorcode is %i (0x%X).\n", rc, rc);
 		return result;
 	}
@@ -180,11 +190,11 @@ std::string Database::UnescapeString(std::string str)
 	// loop through characters in the input string
 	for (size_t idx = 0; idx < str.size(); idx++)
 	{
-		if (str.substr(idx, 6) == "&apos;")
+		if (str.substr(idx, 6) == "&apos;")				// single quote
 			_out += "\'";
-		else if (str.substr(idx, 6) == "&quot;")
+		else if (str.substr(idx, 6) == "&quot;")		// double quote
 			_out += "\"";
-		else
+		else											// any other character
 			_out += str[idx];
 	}
 

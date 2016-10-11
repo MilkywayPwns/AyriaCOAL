@@ -44,6 +44,8 @@ struct Authenticationservice
 
 				// Obtain userdata from SQL
 				std::vector < Database::QueryResult > results = Database::Select("users",
+					// WHERE email = emailhash
+					// AND password = passswordhash
 					{
 						{ "email", Email },
 						{ "password", Password }
