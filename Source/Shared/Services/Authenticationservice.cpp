@@ -6,6 +6,7 @@
 */
 
 #include "../../STDInclude.h"
+#include "../Database.h"
 #include <Nyffenegger/base64.h>
 #include <nlohmann/json.hpp>
 #include <fossa/fossa.h>
@@ -46,11 +47,21 @@ struct Authenticationservice
                     Compare against the SQLite database.
                     Return Username and UserID.
                 */
-                if (true)
+
+				// Obtain userdata from SQL
+				std::vector < Database::QueryResult > results = Database::Select("users",
+					{
+						{ "email", Email },
+						{ "password", Password }
+					}
+				);
+
+				// Check if result size is 1 (2 or more shouldn't be possible)
+                if (results.size() == 1)
                 {
                     Ticket_t Userticket;
-                    Userticket.UserID = 0;
-                    Userticket.Username = "TODO";
+                    Userticket.UserID = results[0]["uid"].ToUint32();
+                    Userticket.Username = results[0]["username"].ToString();
                     Userticket.Expiration = time(NULL) + 120;
                     Userticket.IPAddress = Localstate->IPAddress;
 

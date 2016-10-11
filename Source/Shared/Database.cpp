@@ -23,7 +23,7 @@ bool Database::Insert(std::string table, std::map < std::string, QueryValue > va
 	for (auto it : values)
 	{
 		colstr += Database::EscapeString(it.first) + ",";
-		valstr += "'" + Database::EscapeString(it.second.Value()) + "',";
+		valstr += "'" + Database::EscapeString(it.second.ToString()) + "',";
 	}
 
 	// Remove the last ,
@@ -79,7 +79,7 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 		bool firstEntry = true;
 		for (auto col : where_stmt)
 		{
-			data_where += ((firstEntry) ? "WHERE " : "AND ") + Database::EscapeString(col.first) + "='" + Database::EscapeString(col.second.Value()) + "' ";
+			data_where += ((firstEntry) ? "WHERE " : "AND ") + Database::EscapeString(col.first) + "='" + Database::EscapeString(col.second.ToString()) + "' ";
 			firstEntry = false;
 		}
 	}
