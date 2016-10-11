@@ -36,8 +36,12 @@ namespace Database
 		{
 			m_val = str;
 		}
+		std::string ToString()
+		{
+			return m_val;
+		}
 
-#define TYPE_TO_STRING(__in_type) \
+#define GENERATE_TYPEFUNCS(__in_type) \
 		QueryValue(__in_type __in) \
 			: m_val(std::to_string(__in_type(__in))) \
 		{ \
@@ -47,29 +51,30 @@ namespace Database
 			m_val = std::to_string(__in_type(__in)); \
 		}
 
+#define GENERATE_TYPEFUNCS_ADV(__in_type, __in_to_name, __in_to_func) \
+		GENERATE_TYPEFUNCS(__in_type) \
+		__in_type __in_to_name() \
+		{ \
+			return __in_to_func(m_val); \
+		}
+
 		// define operators / init funcs
 
 		// 8 bits
-		TYPE_TO_STRING(int8_t)
-		TYPE_TO_STRING(uint8_t)
+		GENERATE_TYPEFUNCS(int8_t)
+		GENERATE_TYPEFUNCS(uint8_t)
 		// 16 bits
-		TYPE_TO_STRING(int16_t)
-		TYPE_TO_STRING(uint16_t)
+		GENERATE_TYPEFUNCS(int16_t)
+		GENERATE_TYPEFUNCS(uint16_t)
 		// 32 bits
-		TYPE_TO_STRING(int32_t)
-		TYPE_TO_STRING(uint32_t)
+		GENERATE_TYPEFUNCS_ADV(int32_t, ToInt32, std::stoi)
+		GENERATE_TYPEFUNCS_ADV(uint32_t, ToUint32, std::stoul)
 		// 64 bits
-		TYPE_TO_STRING(int64_t)
-		TYPE_TO_STRING(uint64_t)
-
+		GENERATE_TYPEFUNCS_ADV(int64_t, ToInt64, std::stoll)
+		GENERATE_TYPEFUNCS_ADV(uint64_t, ToUint64, std::stoull)
 		// Float point
-		TYPE_TO_STRING(double)
-		TYPE_TO_STRING(float)
-
-		std::string Value()
-		{
-			return m_val;
-		}
+		GENERATE_TYPEFUNCS_ADV(double, ToDouble, std::stod)
+		GENERATE_TYPEFUNCS_ADV(float, ToFloat, std::stof)
 	};
 	class QueryResult
 	{
