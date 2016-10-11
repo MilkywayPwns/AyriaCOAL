@@ -25,6 +25,7 @@
     <ClInclude Include="Source\Configuration\Defines.h" />
     <ClInclude Include="Source\Configuration\Macros.h" />
     <ClInclude Include="Source\Configuration\Warnings.h" />
+    <ClInclude Include="Source\Shared\Database.h" />
     <ClInclude Include="Source\Lobby\Lobbyheader.h" />
     <ClInclude Include="Source\Shared\All.h" />
     <ClInclude Include="Source\Shared\Network.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="Source\Auth\Authlistener.cpp" />
     <ClCompile Include="Source\Client\Clientauthentication.cpp" />
     <ClCompile Include="Source\Client\Clientlistener.cpp" />
+    <ClCompile Include="Source\Shared\Database.cpp" />
     <ClCompile Include="Source\Lobby\Lobbylistener.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Shared\Network.cpp" />
