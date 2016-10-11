@@ -73,8 +73,6 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 	// Update WHERE data, if specified
 	if (where_stmt.size() > 0)
 	{
-		data_where = "";
-
 		// Loop through columns
 		bool firstEntry = true;
 		for (auto col : where_stmt)

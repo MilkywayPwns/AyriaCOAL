@@ -42,12 +42,6 @@ struct Authenticationservice
                 auto Emailhash = COAL::SMS3::Hash(Email);
                 auto Passwordhash = COAL::SMS3::Hash(Password);
 
-                /*
-                    TODO(Convery):
-                    Compare against the SQLite database.
-                    Return Username and UserID.
-                */
-
 				// Obtain userdata from SQL
 				std::vector < Database::QueryResult > results = Database::Select("users",
 					{
@@ -76,7 +70,6 @@ struct Authenticationservice
                 {
                     Response["Error"] = "Credentials were not found in the DB";
                 }
-
             }
             else
             {
