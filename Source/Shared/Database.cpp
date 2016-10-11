@@ -16,6 +16,13 @@ sqlite3 *Database::DatabasePtr;
 // SQL Insert function
 bool Database::Insert(std::string table, std::map < std::string, QueryValue > values)
 {
+	// Check if database connection is open
+	if (!Database::DatabasePtr)
+	{
+		VAPrint("Database error: Tried to query the database, but the database connection has been closed.\n");
+		return false;
+	}
+	
 	std::string valstr;
 	std::string colstr;
 
@@ -49,6 +56,13 @@ bool Database::Insert(std::string table, std::map < std::string, QueryValue > va
 std::vector< Database::QueryResult > Database::Select(std::string table, std::map < std::string, QueryValue > where_stmt, std::vector < std::string > column_stmt)
 {
 	std::vector < Database::QueryResult > result;
+
+	// Check if database connection is open
+	if (!Database::DatabasePtr)
+	{
+		VAPrint("Database error: Tried to query the database, but the database connection has been closed.\n");
+		return result;
+	}
 
 	// Build the SELECT data
 	std::string data_select = "*";
@@ -125,6 +139,11 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 			// Add data to return result
 			result.push_back(row);
 		}
+	}
+	else
+	{
+		VAPrint("Database error: Something went wrong while trying to obtain data from the database, errorcode is %i (0x%X).\n", rc, rc);
+		return result;
 	}
 
 	// Free memory
