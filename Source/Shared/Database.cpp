@@ -1,3 +1,11 @@
+/*
+	Initial author: (https://github.com/)MilkywayPwns for Ayria.se
+	License: GPL 2.0
+	Started: 2016-10-11
+	Notes:
+		Database functions
+*/
+
 #include "../STDInclude.h"
 #include "Database.h"
 
