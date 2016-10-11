@@ -75,6 +75,15 @@ struct Networkinitializer
         ns_set_protocol_http_websocket(Connection);
 #endif
 
+		// Database loading
+#ifdef COAL_CLIENT
+		Database::Load("client.db");
+#elif defined COAL_AUTH
+		Database::Load("auth.db");
+#elif defined COAL_LOBBY
+		Database::Load("lobby.db");
+#endif
+
         std::thread([]() { while (true) ns_mgr_poll(&Manager, 100); }).detach();
     }
 };
