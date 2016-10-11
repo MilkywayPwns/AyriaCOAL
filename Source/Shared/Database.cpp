@@ -7,6 +7,7 @@
 */
 
 #include "../STDInclude.h"
+#include "../Utility/Strings/Variadicstring.h"
 #include "Database.h"
 
 // Pointer to database
@@ -30,12 +31,15 @@ bool Database::Insert(std::string table, std::map < std::string, QueryValue > va
 	valstr[valstr.size() - 1] = '\0';
 
 	// Create SQL query string
-	std::string SQL = "INSERT INTO " + Database::EscapeString(table) + " (" + colstr + ") ";
+	std::string SQL = "INSERT INTO " + Database::EscapeString(table) + " (" + colstr + ") " + 
 	"VALUES " + valstr;
 
 	// Execute SQL query
 	char *error;
 	int result = sqlite3_exec(Database::DatabasePtr, SQL.c_str(), nullptr, nullptr, &error);
+
+	if (result != SQLITE_OK && error)
+		VAPrint("Database error: %s", error);
 
 	// Return result
 	return (result == SQLITE_OK);
@@ -81,7 +85,7 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 	}
 
 	// Build SQL query
-	std::string SQL = "SELECT " + data_select + " "
+	std::string SQL = "SELECT " + data_select + " " + 
 		"FROM " + Database::EscapeString(table) + " " + data_where;
 
 	// Initiate SQL query
@@ -110,13 +114,13 @@ std::vector< Database::QueryResult > Database::Select(std::string table, std::ma
 				switch (int type = sqlite3_column_type(statement, i))
 				{
 					case SQLITE_TEXT:
-						row.append(colname, QueryValue((const char*)sqlite3_column_text(statement, i)));
+						row.append(colname, QueryValue(UnescapeString((const char*)sqlite3_column_text(statement, i))));
 						break;
 					case SQLITE_INTEGER:
 						row.append(colname, QueryValue(sqlite3_column_int64(statement, i)));
 						break;
 					default:
-						printf("ERROR: Unhandled data type %i in function %s\n", type, __FUNCTION__);
+						VAPrint("Database error: Unhandled data type %i in function %s\n", type, __FUNCTION__);
 				}
 			}
 
